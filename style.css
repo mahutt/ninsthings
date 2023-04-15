@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+/* body {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: max(1200px);
+} */
+
+.header {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    /* max-width: 1200px; */
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+        "logo heading shopping-bag"
+        "nav nav nav";
+    justify-items: center;
+    align-items: center;
+    /* justify-content: center; */
+
+}
+.logo {
+    grid-area: logo;
+}
+.heading {
+    grid-area: heading;
+    font-family: 'Mynerve', cursive;
+}
+.shopping-bag {
+    grid-area: shopping-bag;
+    width: 150px;
+}
+.nav {
+    grid-area: nav;
+}
+
+/* STYLING NAV BAR  */
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.nav ul li {
+    display: inline;
+}
+.nav ul li a {
+    text-decoration: none;
+    color: black;
+}

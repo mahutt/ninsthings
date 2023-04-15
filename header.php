@@ -1,0 +1,12 @@
+<div class="header">
+    <h1 class="logo">N</h1>
+    <h1 class="heading">nin's things</h1>
+    <img class="shopping-bag" src="img/bag.png">
+    <nav class="nav">
+        <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="products.php">Products</a></li>
+            <li><a href="contact.php">Contact</a></li>
+        </ul>
+    </nav>
+</div>
