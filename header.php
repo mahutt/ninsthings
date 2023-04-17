@@ -4,9 +4,9 @@
     <img class="shopping-bag" src="img/bag.png">
     <nav class="nav">
         <ul>
-            <li><a href="index.php">Home</a></li>
-            <li><a href="products.php">Products</a></li>
-            <li><a href="contact.php">Contact</a></li>
+            <li><a href="index.php">HOME</a></li>
+            <li><a href="products.php">PRODUCTS</a></li>
+            <li><a href="contact.php">CONTACT</a></li>
         </ul>
     </nav>
 </div>
