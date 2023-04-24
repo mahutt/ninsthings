@@ -5,8 +5,8 @@
         <img class="shopping-bag" src="img/bag.png">
         <nav class="nav">
             <ul>
-                <li><a href="gallery.php">GALLERY</a></li>
-                <li><a href="index.php">HOME</a></li>
+                <li><a href="products.php">PRODUCTS</a></li>
+                <li><a href="home.php">HOME</a></li>
                 <li><a href="contact.php">CONTACT</a></li>
             </ul>
         </nav>

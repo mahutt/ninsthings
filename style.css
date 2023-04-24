@@ -188,6 +188,7 @@
     overflow-x: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
+    aspect-ratio: 3 / 4;
     /* an aspect ratio here could help with standardization */
 }
 
@@ -195,6 +196,7 @@
     flex: 1 0 100%;
     scroll-snap-align: start;
     width: 100%;
+    object-fit: cover;
 }
 
 
