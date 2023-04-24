@@ -17,11 +17,37 @@
     grid-template-columns: max(1200px);
 } */
 
+.footer {
+    max-width: 1200px;
+    margin-top: 10em;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        ". footing .";
+    justify-items: center;
+    align-items: center;
+    font-size: 0.5vw;
+
+    box-shadow: 0px -2em 2em -2em rgba(0, 0, 0, 0.1);    
+}
+
+.footing {
+    grid-area: footing;
+    font-family: 'Mynerve', cursive;
+    font-size: 5em;
+    /* width: 50%; */
+    color: rgb(192, 192, 192);
+    padding: 1em 0;
+}
+
+
 .header {
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    /* max-width: 1200px; */
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: auto auto;
@@ -30,13 +56,24 @@
         "nav nav nav";
     justify-items: center;
     align-items: center;
-    /* justify-content: center; */
-    /* font-size: 1vw; */
+    font-size: 0.5vw;
 
 }
 
 @media (max-width: 1200px) {
     .header {
+        font-size: 1vw;
+    }
+    .footer {
+        font-size: 1vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        font-size: 1.5vw;
+    }
+    .footer {
         font-size: 1.5vw;
     }
 }
@@ -64,7 +101,7 @@
     grid-area: nav;
     width: 100%;
     padding: 2em 0 2em 0;
-    box-shadow: 0px 2em 2em rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2em 2em -2em rgba(0, 0, 0, 0.1);
     border-top: 1px solid rgba(192, 192, 192, 0.3);
 }
 
@@ -89,10 +126,24 @@
     font-size: 3em;
 }
 
+.products-wrapper {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+        /* align-items: center; */
+}
+
+
+
 /* STYLING PRODUCT BOX  */
 .product {
     /* border: 1px solid black; */
-    margin: 1em;
+    margin: 1em 0.2em;
+    padding: 0 1em 0 1em;
     font-family: 'Schibsted Grotesk', sans-serif;
 
     display: grid;
@@ -106,12 +157,85 @@
 
     /* justify-items: center;
     align-items: center; */
+    /* width: 200px; */
+    width: 100%;
+    max-width: 365px;
+    /* align-self: center; */
+    box-shadow: 0px 1em 0.5em -0.5em rgba(0, 0, 0, 0.1);
+    /* border: 1px solid red; */
+    border-radius: 0 0 1.4em 1.4em;
+    
+   
 }
 
-.product .product-image {
+/* @media (min-width: 1000px) {
+    .product {
+        
+    }
+} */
+
+.product .product-image-box {
     grid-area: product-image;
+    position: relative;
+    /* width: 100%; */
+    /* should add a max width here when sizing site upwards? */
+    /* max-width: 1000px; */
+    overflow: hidden;
+}
+
+.product .product-image-box .slider {
+    display: flex;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* an aspect ratio here could help with standardization */
+}
+
+.product .product-image-box .slider .product-image {
+    flex: 1 0 100%;
+    scroll-snap-align: start;
     width: 100%;
 }
+
+
+
+
+.product .product-image-box .slider-buttons {
+    /* padding-bottom: 0.3em;
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5em; */
+    display: flex;
+    padding: 1em;
+    column-gap: 1em;
+    position: absolute;
+    bottom: 0;
+    justify-content: center;
+    left: 0;
+    right: 0;
+}
+
+.product .product-image-box .slider-buttons a {
+    margin: 0.5em;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.75);
+    transition: opcacity ease 250ms;
+}
+
+/* MAYBE JUST REMOVE THESE AND HAVE THE IMAGES MOVE ON THEIR OWN WHEN THE SITE IS FIRST LOADED */
+.product .product-image-box .slider-buttons a:hover {
+    opacity: 1;
+}
+
 
 .product .product-name {
     grid-area: product-name;    
@@ -134,9 +258,11 @@
     grid-area: cart-form;
     margin: 0.5em 0;
     display: flex;
+    flex-wrap: wrap;
     /* flex-direction: column; */
     justify-content: space-between;
     align-items: center;
+
 }
 
 .product .cart-form .product-size {
@@ -148,6 +274,7 @@
     border-radius: 2em;  */
     border-radius: 1.5em;
     overflow: hidden;
+    margin-bottom: 0.5em;
     
 }
 
@@ -155,25 +282,25 @@
     background-color: rgb(192, 192, 192);
     /* padding: 0 1em 0 1em; */
     font-size: 1.5em;
+    font-weight: bold;
     padding: 0.5em 1em;
-    
+    cursor: pointer;
+
 }
 
-.size-label:not(:last-of-type) {
+.product .cart-form .size-label:not(:last-of-type) {
     border-right: 1px solid rgba(92, 92, 92);
 }
 
-
-
-.size-radio {
-    /* display: none; */
+.product .cart-form .size-radio {
+    display: none;
 }
 
-.size-radio:checked + .size-label {
+.product .cart-form .size-radio:checked + .size-label {
     background-color: rgb(92, 92, 92);
 }
 
-.cart-submit {
+.product .cart-form .cart-submit {
     border: none;
     color: white;
     background-color: black;
@@ -182,6 +309,7 @@
     border-radius: 0.5em;
     /* font-weight: 600; */
     font-family: 'Bebas Neue', cursive;
+    cursor: pointer;
 }
 
 
@@ -194,3 +322,4 @@
 .product .cart-button {
     grid-area: cart-button;
 } */
+
