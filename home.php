@@ -26,13 +26,13 @@ $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE AR
         <div class="product-name"><?=$product['name']?></div>
         <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
         <!-- THIS FORM HAS YET TO BE CUSTOMIZED PER ITEM! -->
-        <form class="cart-form" action="">
+        <form class="cart-form" action="index.php?page=cart" method="post">
         <div class="product-size">
-            <input type="hidden" name="product-number" value="p1">
-            <input class="size-radio" type="radio" name="size" value="xs" id="size-radio-xs">
-            <label class="size-label" for="size-radio-xs">XS</label>
-            <input class="size-radio" type="radio" name="size" value="s" id="size-radio-s">
-            <label class="size-label" for="size-radio-s">S</label>
+            <input type="hidden" name="product-id" value="<?=$product['id']?>">
+            <?php foreach (explode(",", $product['sizes']) as $size): ?>
+            <input class="size-radio" type="radio" name="size" value="<?=$size?>" id="size-radio-<?=$size?>">
+            <label class="size-label" for="size-radio-<?=$size?>"><?=$size?></label>   
+            <?php endforeach; ?>
         </div>
         <input class="cart-submit" type="submit" value="ADD TO CART">
     </form>

@@ -1,6 +1,6 @@
 <?php 
 session_start();
-// https://codeshack.io/shopping-cart-system-php-mysql/ at section 6.2
+// https://codeshack.io/shopping-cart-system-php-mysql/ at section 9.4
 
 // CONNECTING TO DB USING PDO MYSQL
 include 'functions.php';

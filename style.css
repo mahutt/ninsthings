@@ -286,7 +286,7 @@
     /* padding: 0 1em 0 1em; */
     font-size: 1.5em;
     font-weight: bold;
-    padding: 0.5em 1em;
+    padding: 0.5em 0.8em;
     cursor: pointer;
 
 }
@@ -302,10 +302,6 @@
 .selected-size {
     background-color: rgb(92, 92, 92);
 }
-/* 
-.product .cart-form .size-radio:checked ~ .size-label {
-    background-color: rgb(92, 92, 92);
-} */
 
 .product .cart-form .cart-submit {
     border: none;

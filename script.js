@@ -15,3 +15,5 @@ for (var i = 0; i < sizeLabels.length; i++) {
     });
 }
 
+// MARK OFF SIZE LABEL IF IT IS THE ONLY SIZE AVAILABLE
+
