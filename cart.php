@@ -76,8 +76,29 @@ if ($products_in_cart) {
 <?=template_header('cart')?>
 <!-- BUILD CART PAGE HERE (9.6)  -->
 <div class="cart-wrapper">
+    <?php if (empty($products)): ?>
+    <h1>Your cart is empty!</h1>
+    <?php else: ?>
     <h1>Shopping Cart</h1>
-    <form action="index.php?page=cart" method="post">   
+    <?php foreach($products as $product): ?>
+
+
+
+    
+    
+    
+    <div class="cart-item">
+        <img id="<?=$product['id']?>-image-1" src="products/<?=$product['img']?>/1.jpg" alt="" class="product-image">
+        <div class="product-name"><?=$product['name']?></div>
+        
+
+    </div>
+
+
+
+
+
+    <!-- <form action="index.php?page=cart" method="post">   
         <table>
             <thead>
                 <tr>
@@ -101,7 +122,6 @@ if ($products_in_cart) {
                     <td>
                         <div class="product-name"><?=$product['name']?></div>
 
-                        <!-- MOVE THIS BUTTON TO THE END IMO  -->
                         <br>
                         <a href="index.php?page=cart&remove=<?=$product['id']?>" class="remove">Remove</a>
                     </td>
@@ -118,10 +138,9 @@ if ($products_in_cart) {
             <span class="subtotal-value">&dollar;<?=$subtotal?></span>
         </div>
         <div class="buttons">
-            <!-- REMOVE UPDATE  -->
             <input type="submit" value="Update" name="update">
             <input type="submit" value="Place Order" name="placeorder">
         </div>
-    </form>
+    </form> -->
 </div>
 <?=template_footer()?>
