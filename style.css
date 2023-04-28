@@ -259,15 +259,71 @@
 .product .cart-form {
     grid-area: cart-form;
     margin: 0.5em 0;
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
-    /* flex-direction: column; */
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
 
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+        "product-quantity ."
+        "product-size cart-submit";
+    justify-items: start;
+}
+
+/* STYLING QUANTITY SELECTOR */
+input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    text-align: center;
+    /* position: relative; */
+}
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+
+.product-quantity {
+    grid-area: product-quantity;
+    position: relative;
+    width: 8em;
+    margin: 0.5em 0;
+}
+
+.product-quantity .quantity-number {
+    font-size: 1.5em;
+    width: 100%;
+    height: 2em;
+}
+
+.product-quantity .decrement-button, .increment-button {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 0.25em 0.5em;
+    height: 2em;
+    position: absolute;
+}
+
+.product-quantity .decrement-button, .increment-button:hover {
+    cursor: pointer;
+}
+
+.product-quantity .decrement-button {
+    left: 0;
+}
+
+.product-quantity .increment-button {
+    right: 0;
 }
 
 .product .cart-form .product-size {
+    grid-area: product-size;
     /* padding: 0.5em; */
     display: inline-flex;
     /* justify-content: space-between; */
@@ -276,7 +332,7 @@
     border-radius: 2em;  */
     border-radius: 1.5em;
     overflow: hidden;
-    margin-bottom: 0.5em;
+    margin: 0.5em 0;
     
 }
 
@@ -304,6 +360,8 @@
 }
 
 .product .cart-form .cart-submit {
+    grid-area: cart-submit;
+    justify-self: end;
     border: none;
     color: white;
     background-color: black;
@@ -316,13 +374,5 @@
 }
 
 
-
-/* 
-.product .product-size {
-    grid-area: product-size;
-}
-
-.product .cart-button {
-    grid-area: cart-button;
-} */
+/* STYLING CART PAGE  */
 

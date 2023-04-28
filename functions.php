@@ -34,9 +34,9 @@ echo <<<EOT
             <img class="shopping-bag" src="img/bag.png">
             <nav class="nav">
                 <ul>
-                    <li><a href="products.php">PRODUCTS</a></li>
-                    <li><a href="home.php">HOME</a></li>
-                    <li><a href="contact.php">CONTACT</a></li>
+                    <li><a href="index.php?page=products">PRODUCTS</a></li>
+                    <li><a href="index.php?page=home">HOME</a></li>
+                    <li><a href="index.php?page=contact">CONTACT</a></li>
                 </ul>
             </nav>
         </div>
