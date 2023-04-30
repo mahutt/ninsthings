@@ -75,72 +75,43 @@ if ($products_in_cart) {
 ?>
 <?=template_header('cart')?>
 <!-- BUILD CART PAGE HERE (9.6)  -->
-<div class="cart-wrapper">
-    <?php if (empty($products)): ?>
-    <h1>Your cart is empty!</h1>
-    <?php else: ?>
-    <h1>Shopping Cart</h1>
-    <?php foreach($products as $product): ?>
-
-
-
-    
-    
-    
-    <div class="cart-item">
-        <img id="<?=$product['id']?>-image-1" src="products/<?=$product['img']?>/1.jpg" alt="" class="product-image">
-        <div class="product-name"><?=$product['name']?></div>
-        
-
+<form action="index.php?page=cart" method="post">
+    <div class="cart-wrapper">
+        <?php if (empty($products)): ?>
+        <div class="cart-title">Your cart is empty!</div>
+        <?php else: ?>
+        <div class="cart-title">Shopping Cart</div>
+        <div class="cart-items-wrapper">
+            <?php foreach($products as $product): ?>
+            <div class="cart-item">
+                <img id="<?=$product['id']?>-image-1" src="products/<?=$product['img']?>/1.jpg" alt="" class="product-image">
+                <div class="product-name"><?=$product['name']?></div>
+                <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
+                <div class="product-quantity">
+                    <input class="quantity-number" type="number" name="quantity-<?=$product['id']?>" value="<?=$products_in_cart[$product['id']]?>" min="1" max="<?=$product['quantity']?>" required>
+                    <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
+                </div>
+                <a href="index.php?page=cart&remove=<?=$product['id']?>" class="remove">Remove</a>
+                <div class="product-total">
+                    <div class="label">Subtotal</div>
+                    <div class="price">&dollar;<?=$product['price'] * $products_in_cart[$product['id']]?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </div>
-
-
-
-
-
-    <!-- <form action="index.php?page=cart" method="post">   
-        <table>
-            <thead>
-                <tr>
-                    <td>Product</td>
-                    <td>Price</td>
-                    <td>Quantity</td>
-                    <td>Total</td>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($products)): ?>
-                <tr>
-                    <td>Your cart is empty!</td>
-                </tr>
-                <?php else: ?>
-                <?php foreach($products as $product): ?>
-                <tr>
-                    <td>
-                    <img id="<?=$product['id']?>-image-1" src="products/<?=$product['img']?>/1.jpg" alt="" class="product-image">
-                    </td>
-                    <td>
-                        <div class="product-name"><?=$product['name']?></div>
-
-                        <br>
-                        <a href="index.php?page=cart&remove=<?=$product['id']?>" class="remove">Remove</a>
-                    </td>
-                    <td><div class="product-price">&dollar;<?=$product['price']?> CAD</div></td>
-                    <td><input class="quantity-number" type="number" name="quantity" value="1" min="1" max="<?=$product['quantity']?>" required></td>
-                    <td class="price">&dollar;<?=$product['price'] * $products_in_cart[$product['id']]?></td>
-                </tr>
-                <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <div class="cart-subtotal">
-            <span class="subtotal-label">Subtotal</span>
-            <span class="subtotal-value">&dollar;<?=$subtotal?></span>
-        </div>
+    <div class="cart-place-order">
+        <input class="update-button" type="submit" value="update quantities" name="update">
         <div class="buttons">
-            <input type="submit" value="Update" name="update">
-            <input type="submit" value="Place Order" name="placeorder">
+            <div class="subtotal">
+                <div class="subtotal-label">Subtotal:&nbsp</div>
+                <div class="subtotal-value">&dollar;<?=$subtotal?></div>
+            </div>
+            <input class="order-submit" type="submit" value="Place Order" name="placeorder">
         </div>
-    </form> -->
-</div>
+    </div>
+</form>
+
+<script type="text/javascript" src="script.js"></script>
 <?=template_footer()?>

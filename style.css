@@ -60,23 +60,10 @@
 
 }
 
-@media (max-width: 1200px) {
-    .header {
-        font-size: 1vw;
-    }
-    .footer {
-        font-size: 1vw;
-    }
-}
 
-@media (max-width: 600px) {
-    .header {
-        font-size: 1.5vw;
-    }
-    .footer {
-        font-size: 1.5vw;
-    }
-}
+
+
+
 
 .logo {
     grid-area: logo;
@@ -200,17 +187,6 @@
 }
 
 .product .product-image-box .slider-buttons {
-    /* padding-bottom: 0.3em;
-    display: flex;
-    justify-content: space-around;
-    position: absolute;
-    bottom: 0%;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.5);
-    color: black;
-    background-color: rgba(255, 255, 255, 0.5);
-    font-size: 1.5em; */
     display: flex;
     padding: 1em;
     column-gap: 1em;
@@ -375,9 +351,155 @@ input[type="number"] {
     margin-right: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
 }
 
-.cart-wrapper .product-image {
+.cart-title {
+    margin: 1em;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: bold;
+    font-size: 1.8em;
+    box-shadow: 0px 1px rgba(0, 0, 0, 1);
+}
+
+.cart-item {
+    margin: 1em;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+    "product-image product-name product-price product-quantity remove price";
+    align-items: center;
+    justify-items: center;
+    gap: 1em;
+    box-shadow: 0px 1em 0.5em -0.5em rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 1.4em 1.4em;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    overflow: hidden;
+}
+
+.cart-item .product-image {
+    grid-area: product-image;
     width: 100%;
+}
+
+.cart-item .product-name {
+    grid-area: product-name;
+    font-family: 'Bebas Neue', cursive;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+.cart-item .product-price {
+    grid-area: product-price;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.cart-item .product-quantity {
+    grid-area: product-quantity;
+}
+
+.cart-item .remove {
+    grid-area: remove;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.cart-item .product-total .label {
+    font-weight: bold;
+    font-size: 1em;
+    color: grey;
+}
+
+.cart-item .product-total .price {
+    grid-area: product-total;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.cart-place-order {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.update-button {
+    margin-top: 0.8em;
+}
+
+.update-button, .order-submit {
+    border: none;
+    color: white;
+    background-color: black;
+    padding: 0.3em 0.5em;
+    font-size: 1.8em;
+    border-radius: 0.5em;
+    font-family: 'Bebas Neue', cursive;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+}
+
+.subtotal {
+    display: flex;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.subtotal-label {
+    /* display: flex; */
+}
+
+
+
+
+
+
+
+
+@media (max-width: 1200px) {
+    .header {
+        font-size: 1vw;
+    }
+    .footer {
+        font-size: 1vw;
+    }
+}
+
+@media (max-width: 800px) {
+    .cart-item {
+        display: grid;
+        grid-template-rows: auto auto auto auto;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+        "product-image product-name"
+        "product-image product-price"
+        "product-image product-quantity"
+        "product-total remove ";
+        /* align-items: center;
+        justify-items: center; */
+        align-content: center;
+        padding-bottom: 1em;
+    }
+    .cart-item .product-image {
+        /* width: 20em; */
+        width: 40vw;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .header {
+        font-size: 1.5vw;
+    }
+    .footer {
+        font-size: 1.5vw;
+    }
 }
