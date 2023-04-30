@@ -1,10 +1,10 @@
 <?php
-// CURRENTLY ON THIS PAGE, MUST FIGURE OUT WHY QUANITY ISN'T UPDATING WHEN RESUBMIT OR UPDATE!! section ~ 9.5
+
 // IF USER CLICKED "ADD TO CART":
-if (isset($_POST['product-id'], $_POST['quantity']) && is_numeric($_POST['product-id']) && is_numeric($_POST['quantity'])) {
-    
+if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeric($_POST['product-id']) && is_numeric($_POST['quantity'])) {
     $id = (int)$_POST['product-id'];
     $quantity = (int)$_POST['quantity'];
+    $size = $_POST['size'];
 
     $query = $pdo->prepare('SELECT * FROM products WHERE id = ?');
     $query->execute([$_POST['product-id']]);
@@ -16,13 +16,13 @@ if (isset($_POST['product-id'], $_POST['quantity']) && is_numeric($_POST['produc
         if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             
             // UPDATING QUANTITY IF PRODUCT ALREADY EXISTS IN CART:
-            if (array_key_exists($product_id, $_SESSION['cart'])) {
-                $_SESSION['cart'][$id] += $quantity; 
+            if (array_key_exists($id, $_SESSION['cart'])) {
+                $_SESSION['cart'][$id.",".$size] += $quantity; 
             } else {
-                $_SESSION['cart'][$id] = $quantity;
+                $_SESSION['cart'][$id.",".$size] = $quantity;
             }
         } else {
-            $_SESSION['cart'] = array($product_id => $quantity);
+            $_SESSION['cart'] = array($id.",".$size => $quantity);
         }
     }
     // PREVENTING FORM RESUBMISSION:
@@ -64,13 +64,42 @@ $subtotal = 0.00;
 if ($products_in_cart) {
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
     $query = $pdo->prepare('SELECT * FROM products WHERE id IN ('.$array_to_question_marks.')');
-    $query->execute(array_keys($products_in_cart));
-    $products = $query->fetchAll(PDO::FETCH_ASSOC);
+    
+    $ids_sizes = array_keys($products_in_cart);
+    $ids = array();
+    foreach ($ids_sizes as $id_size) {
+        $ids[] = (int)explode(",", $id_size)[0];
+    }
+
+    $query->execute($ids);
+    $unlisted_products = $query->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($unlisted_products as $product) {
+        $products[$product['id']] = $product;
+    }
+
+    // 
+    // console(sizeof($products_in_cart));
+    // console(sizeof($products));
 
     // CALCULATING SUBTOTAL
-    foreach ($products as $product) {
-        $subtotal += (float)$product['price'] + (int)$products_in_cart[$product['id']];
+    foreach ($products_in_cart as $id_size => $quantity) {
+        
+        $id = (int)explode(",", $id_size)[0];
+
+        $subtotal += (float)$products[$id]['price'] * (int)$quantity;
+
+        // foreach ($products as $product) {
+        //     if ($product['id'] = $id) {
+                
+        //     }
+        // }
     }
+
+
+    // foreach ($products as $product) {
+    //     echo $product['id'];
+    //     $subtotal += (float)$product['price'] * (int)$products_in_cart[$product['id']];
+    // }
 }
 ?>
 <?=template_header('cart')?>
@@ -82,19 +111,23 @@ if ($products_in_cart) {
         <?php else: ?>
         <div class="cart-title">Shopping Cart</div>
         <div class="cart-items-wrapper">
-            <?php foreach($products as $product): ?>
+            <?php foreach($products_in_cart as $id_size => $quantity): ?>
+            <?php $id = (int)explode(",", $id_size)[0]; $size = explode(",", $id_size)[1]; ?>
             <div class="cart-item">
-                <img id="<?=$product['id']?>-image-1" src="products/<?=$product['img']?>/1.jpg" alt="" class="product-image">
-                <div class="product-name"><?=$product['name']?></div>
-                <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
+                <img id="<?=$id_size?>-image-1" src="products/<?=$products[$id]['img']?>/1.jpg" alt="" class="product-image">
+                <div class="product-name">
+                    <div><?=$products[$id]['name']?></div>
+                    <span class="size">(<?=$size?>)</span>
+                </div>
+                <div class="product-price">&dollar;<?=$products[$id]['price']?> CAD</div>
                 <div class="product-quantity">
-                    <input class="quantity-number" type="number" name="quantity-<?=$product['id']?>" value="<?=$products_in_cart[$product['id']]?>" min="1" max="<?=$product['quantity']?>" required>
+                    <input class="quantity-number" type="number" name="quantity-<?=$id?>" value="<?=$quantity?>" min="1" max="100" required> <!-- CURRENTLY SET MAX TO 100, NEED TO SET ACCORDING TO HOW MANY THERE ARE OF THAT SIZE -->
                     <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
                 </div>
-                <a href="index.php?page=cart&remove=<?=$product['id']?>" class="remove">Remove</a>
+                <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove">Remove</a>
                 <div class="product-total">
                     <div class="label">Subtotal</div>
-                    <div class="price">&dollar;<?=$product['price'] * $products_in_cart[$product['id']]?></div>
+                    <div class="price">&dollar;<?=$products[$id]['price'] * $quantity?></div>
                 </div>
             </div>
             <?php endforeach; ?>

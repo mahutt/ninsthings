@@ -83,7 +83,30 @@
     grid-area: shopping-bag;
     width: 8em;
     /* width: 20%; */
+    position: relative;
 }
+
+.shopping-bag a img {
+    width: 100%;
+}
+
+.shopping-bag .cart-counter {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    color: white;
+    background-color: black;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 1.2em;
+}
+
+
 .nav {
     grid-area: nav;
     width: 100%;
@@ -384,11 +407,21 @@ input[type="number"] {
 }
 
 .cart-item .product-name {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     grid-area: product-name;
     font-family: 'Bebas Neue', cursive;
     font-weight: bold;
     font-size: 2em;
     text-align: center;
+}
+
+.cart-item .product-name .size {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: bold;
+    font-size: 0.5em;
+    color: grey;
 }
 
 .cart-item .product-price {
