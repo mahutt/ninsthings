@@ -25,18 +25,19 @@ $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE AR
         </div>  
         <div class="product-name"><?=$product['name']?></div>
         <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
-        <form class="cart-form" action="index.php?page=cart" method="post">
+        <form id="form-<?=$product['id']?>" class="cart-form" action="index.php?page=cart" method="post" onsubmit="return validateCartForm(this)">
             <input name="product-id" type="hidden" value="<?=$product['id']?>">
             <div class="product-quantity">
-                <input name="quantity" class="quantity-number" type="number" value="1" min="1" required>
+                <input name="quantity" class="quantity-number" type="number" value="1" min="1" max="100" required>
                 <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
             </div>
             <div class="product-size">
-                <?php foreach (getsizes($product['size_quantity']) as $size): ?>
-                <input name="size" class="size-radio" type="radio" value="<?=$size?>" id="size-radio-<?=$size?>">
-                <label class="size-label" for="size-radio-<?=$size?>"><?=$size?></label>   
+                <?php foreach (getQuantityPerSize($product['size_quantity']) as $size => $quantity): ?>
+                <input name="size" class="size-radio" type="radio" value="<?=$size?>" id="<?=$product['id'].'-'.$size?>-radio">
+                <label id="<?=$quantity?>" class="size-label" for="<?=$product['id'].'-'.$size?>-radio"><?=$size?></label>   
                 <?php endforeach; ?>
-            </div>
+            </div>  
+            <div class="quantity-notice">Select a size</div>
             <input class="cart-submit" type="submit" value="ADD TO CART">
         </form>
     </div>

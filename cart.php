@@ -1,4 +1,7 @@
 <?php
+foreach ($_POST as $key => $value) {
+    console($key." => ".$value);
+}
 
 // IF USER CLICKED "ADD TO CART":
 if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeric($_POST['product-id']) && is_numeric($_POST['quantity'])) {
@@ -16,7 +19,7 @@ if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeri
         if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             
             // UPDATING QUANTITY IF PRODUCT ALREADY EXISTS IN CART:
-            if (array_key_exists($id, $_SESSION['cart'])) {
+            if (array_key_exists($id.",".$size, $_SESSION['cart'])) {
                 $_SESSION['cart'][$id.",".$size] += $quantity; 
             } else {
                 $_SESSION['cart'][$id.",".$size] = $quantity;
@@ -31,7 +34,7 @@ if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeri
 }
 
 // IF USER CLICKED "REMOVE":
-if (isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart'][$_GET['remove']])) {
+if (isset($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart'][$_GET['remove']])) {
     unset($_SESSION['cart'][$_GET['remove']]);
 }
 
@@ -39,10 +42,10 @@ if (isset($_GET['remove']) && is_numeric($_GET['remove']) && isset($_SESSION['ca
 if (isset($_POST['update']) && isset($_SESSION['cart'])) {
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'quantity') !== false && is_numeric($value)) {
-            $id = str_replace('quantity-', '', $key);
+            $id_size = str_replace('quantity-', '', $key);
             $quantity = (int)$value;
-            if (is_numeric($id) && isset($_SESSION['cart'][$id]) && $quantity > 0) {
-                $_SESSION['cart'][$id] = $quantity;
+            if (isset($_SESSION['cart'][$id_size]) && $quantity > 0) {
+                $_SESSION['cart'][$id_size] = $quantity;
             }
         }
     }
@@ -50,9 +53,9 @@ if (isset($_POST['update']) && isset($_SESSION['cart'])) {
     exit;
 }
 
-// CHECKING WHETHER CART IS EMPTY BEFORE PLACING ORDER
+// CHECKING WHETHER CART IS EMPTY BEFORE CHECKING OUT
 if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-    header('Location: index.php?page=placeorder');
+    header('Location: index.php?page=checkout');
     exit;
 }
 
@@ -121,7 +124,8 @@ if ($products_in_cart) {
                 </div>
                 <div class="product-price">&dollar;<?=$products[$id]['price']?> CAD</div>
                 <div class="product-quantity">
-                    <input class="quantity-number" type="number" name="quantity-<?=$id?>" value="<?=$quantity?>" min="1" max="100" required> <!-- CURRENTLY SET MAX TO 100, NEED TO SET ACCORDING TO HOW MANY THERE ARE OF THAT SIZE -->
+                    <?php $getMax = getQuantityPerSize($products[$id]['size_quantity']); ?>
+                    <input class="quantity-number" type="number" name="quantity-<?=$id_size?>" value="<?=$quantity?>" min="1" max="<?=$getMax[$size]?>" required>
                     <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
                 </div>
                 <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove">Remove</a>
@@ -134,6 +138,7 @@ if ($products_in_cart) {
         </div>
         <?php endif; ?>
     </div>
+    <?php if (!empty($products)): ?>
     <div class="cart-place-order">
         <input class="update-button" type="submit" value="update quantities" name="update">
         <div class="buttons">
@@ -141,9 +146,10 @@ if ($products_in_cart) {
                 <div class="subtotal-label">Subtotal:&nbsp</div>
                 <div class="subtotal-value">&dollar;<?=$subtotal?></div>
             </div>
-            <input class="order-submit" type="submit" value="Place Order" name="placeorder">
+            <input class="order-submit" type="submit" value="checkout" name="placeorder">
         </div>
     </div>
+    <?php endif; ?>
 </form>
 
 <script type="text/javascript" src="script.js"></script>

@@ -32,6 +32,17 @@ function getsizes($str) {
     return $sizes;
 }
 
+// TRANSFORMS THE SQL QUANTITY/SIZE STRING INTO A PHP ARRAY OF KEY-VALUE PAIRS
+function getQuantityPerSize($str) {
+    $sizes_quantities = explode(",", $str);
+    $quantities_per_size = array();
+    foreach ($sizes_quantities as $size_quantity) {
+        list($size, $quantity) = explode(":", $size_quantity);
+        $quantities_per_size[$size] = $quantity;
+    }
+    return $quantities_per_size;
+}
+
 // RETURNS TOTAL NUMBER OF A SPECIFIC ITEM (IN ALL SIZES)
 function getquantity($str) {
     $quantity = 0;
@@ -60,7 +71,7 @@ echo <<<EOT
     <header>
         <div class="header-wrapper">
         <div class="header">
-            <h1 class="logo">N</h1>
+            <a href="index.php?page=home"><h1 class="logo">N</h1></a>
             <h1 class="heading">nin's things</h1>
             <div class="shopping-bag">
                 <a href="index.php?page=cart">

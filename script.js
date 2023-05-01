@@ -17,7 +17,14 @@ function selected(label) {
         if (labels[i].classList.contains("selected-size"))
             labels[i].classList.remove("selected-size");
     }
-    label.classList.add("selected-size");     
+    label.classList.add("selected-size"); // HIGHLIGHTING THE SELECTED LABEL
+    const notice = label.parentNode.parentNode.querySelector(".quantity-notice");
+    notice.innerHTML = label.id + "&nbspleft"; // DISPLAYING REMAINING QUANTITY FOR SELECTED SIZE
+    const quantity = notice.parentNode.querySelector(".product-quantity").querySelector(".quantity-number");
+    quantity.max = label.id;
+    if (quantity.value > quantity.max) {
+        quantity.value = quantity.max;
+    }
 }
 
 // APPLYING THE selected() FUNCTION TO ALL LABELS
@@ -28,7 +35,23 @@ for (var i = 0; i < sizeLabels.length; i++) {
     });
 }
 
-
+// VALIDATE FORM WHEN 'ADDING TO CART'
+function validateCartForm(form) {
+    const radios = form.querySelectorAll(".size-radio");
+    for (let i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            return true;
+        }
+    }
+    const radiobox = form.querySelector(".product-size");
+    if (radiobox.classList.contains("invalid-size")) {
+        radiobox.classList.remove("invalid-size");
+        radiobox.offsetWidth;
+    }
+    radiobox.classList.add("invalid-size");
+    return false;
+}
 
 // MARK OFF SIZE LABEL IF IT IS THE ONLY SIZE AVAILABLE
 
+// CHANGE MAX VALUE OF A PRODUCT WHEN SIZE IS SELECTED - (based off size) - ALSO DISPLAY IT SOMEWHERE?
