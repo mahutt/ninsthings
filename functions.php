@@ -53,6 +53,18 @@ function getquantity($str) {
     return $quantity;
 }
 
+// CURRENTLY HERE
+// RETURNS UPDATED SIZE_QUANTITY VALUE GIVEN THE $PRODUCTS IN DB, $ID & $SIZE TO UPDATE AND $QUANTITY TO REMOVE
+function update_size_quantity($products, $id, $size, $quantity) {
+    $currentQuantities = explode(",", $products[$id]['size_quantity']);
+    foreach ($currentQuantities as $currentQuantity) {
+        $currentQuantity = explode(":", $currentQuantity);
+        if ($currentQuantity[0] = $size && ($currentQuantity[1] - $quantity) >= 0) { // how to handle if 0 is new quantity? what to return if less than zero?
+            $currentQuantity[1] -= $quantity;
+        }  
+    }
+}
+
 // TEMPLATE HEADER
 function template_header($title) {
 $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;

@@ -53,12 +53,6 @@ if (isset($_POST['update']) && isset($_SESSION['cart'])) {
     exit;
 }
 
-// CHECKING WHETHER CART IS EMPTY BEFORE CHECKING OUT
-if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-    header('Location: index.php?page=checkout');
-    exit;
-}
-
 $products_in_cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : array();
 $products = array();
 $subtotal = 0.00;
@@ -104,6 +98,62 @@ if ($products_in_cart) {
     //     $subtotal += (float)$product['price'] * (int)$products_in_cart[$product['id']];
     // }
 }
+
+// CHECKING WHETHER CART IS EMPTY BEFORE CHECKING OUT
+if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    // SETTING UP STRIPE ENV
+    require_once 'stripe-php-10.12.1/init.php';
+    require_once 'secrets.php';
+    \Stripe\Stripe::setApiKey($stripeSecretKey); # Defined in secrets.php
+    $DOMAIN = 'http://localhost/nins/';
+
+    // CREATING LINE ITEMS & UPDATING DB?
+    $line_items = array();
+    $query = $pdo->prepare('UPDATE products SET size_quantity = :new_size_quantity WHERE id = :id');
+    foreach ($products_in_cart as $id_size => $quantity) {
+        $id = (int)explode(",", $id_size)[0]; 
+        $size = explode(",", $id_size)[1];
+
+        // UPDATING DB
+        $size_quantity = update_size_quantity($products, $id, $size, $quantity); // define new size_quantity using a function (to be defined) 
+        $stmt->bindParam(':quantity', $item['quantity'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        // CREATING LINE ITEM
+        $line_item = array(
+            'price_data' => array(
+                'currency' => 'cad',
+                'unit_amount' => $products[$id]['price'] * 100,
+                'product_data' => array(
+                    'name' => $products[$id]['name'],
+                    'description' => $size,
+                    'images' => array('https://pawdoption.000webhostapp.com/nins/products/KISSES/1.jpg'), // for testing (temp)
+                    // 'images' => array($DOMAIN.'products/'.$products[$id]['img'].'/1.jpg'),
+                ),
+            ),
+            'quantity' => $quantity,
+        );
+        array_push($line_items, $line_item);
+    }
+
+    // CREATING CHECKOUT SESSION
+    $checkout_session = \Stripe\Checkout\Session::create(array(
+        'payment_method_types' => array('card'),
+        'line_items' => $line_items,
+        'mode' => 'payment',
+        'success_url' => $DOMAIN.'index.php?page=success', // redirect through index?
+        'cancel_url' => $DOMAIN.'index.php?page=cancel',
+    ));
+    
+    // REDIRECT TO CHECKOUT
+    header("HTTP/1.1 303 See Other");
+    header("Location: " . $checkout_session->url);
+    exit;
+}
+
+
+
 ?>
 <?=template_header('cart')?>
 <!-- BUILD CART PAGE HERE (9.6)  -->
