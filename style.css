@@ -230,7 +230,9 @@ footer {
     height: 2em;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.75);
+    /* box-shadow: 0px 1em 0.5em -0.5em rgba(0, 0, 0, 0.1); */
     transition: opcacity ease 250ms;
+    border: 1px solid rgb(80, 80, 80);
 }
 
 /* CONSIDERING REMOVING THESE AND HAVE THE IMAGES MOVE ON THEIR OWN WHEN THE SITE IS FIRST LOADED */
@@ -333,7 +335,7 @@ input[type="number"] {
     background-color: rgb(192, 192, 192);
     font-size: 1.5em;
     font-weight: bold;
-    padding: 0.5em 0.8em;
+    padding: 2.5em 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
