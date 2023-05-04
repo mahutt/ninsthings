@@ -1,14 +1,11 @@
 <?php
-// GET 6 MOST RECENT PRODUCTS
+// GETTING 6 MOST RECENT PRODUCTS
 $query = $pdo->prepare('SELECT * FROM products ORDER BY date_added DESC LIMIT 6');
 $query->execute();
 $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE ARRAY
 ?>
 <?=template_header("nin's")?>
-
 <div class="products-wrapper">
-
-    <!-- TEMPORARY TEMPLATE -->
     <?php foreach ($products as $product): ?>
     <div class="product">
         <div class="product-image-box">
@@ -25,6 +22,9 @@ $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE AR
         </div>  
         <div class="product-name"><?=$product['name']?></div>
         <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
+        <?php if ($product['size_quantity'] == "OUT OF STOCK"): ?>
+            <br><div class="out-of-stock">OUT OF STOCK</div>
+        <?php else: ?>
         <form id="form-<?=$product['id']?>" class="cart-form" action="index.php?page=cart" method="post" onsubmit="return validateCartForm(this)">
             <input name="product-id" type="hidden" value="<?=$product['id']?>">
             <div class="product-quantity">
@@ -40,13 +40,9 @@ $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE AR
             <div class="quantity-notice">Select a size</div>
             <input class="cart-submit" type="submit" value="ADD TO CART">
         </form>
+        <?php endif; ?>
     </div>
-        <!-- CURRENTLY HERE  -->
     <?php endforeach; ?>
-
-
-
 </div>    
 </div>
-<script type="text/javascript" src="script.js"></script>
 <?=template_footer()?>

@@ -6,22 +6,35 @@
 * {
     margin: 0;
     box-sizing: border-box;
-    /* border: 1px solid black; */
 }
-/* body {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    grid-template-columns: max(1200px);
-} */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    animation: fadein ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
+}
+
+footer {
+    margin-top: auto;
+}
 
 .footer {
     max-width: 1200px;
-    margin-top: 10em;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 0;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: auto;
@@ -30,19 +43,16 @@
     justify-items: center;
     align-items: center;
     font-size: 0.5vw;
-
     box-shadow: 0px -2em 2em -2em rgba(0, 0, 0, 0.1);    
 }
 
 .footing {
     grid-area: footing;
-    font-family: 'Mynerve', cursive;
-    font-size: 5em;
-    /* width: 50%; */
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 2.5em;
     color: rgb(192, 192, 192);
     padding: 1em 0;
 }
-
 
 .header {
     max-width: 1200px;
@@ -56,7 +66,7 @@
         "nav nav nav";
     justify-items: center;
     align-items: center;
-    font-size: 0.5vw;
+    font-size: 0.5em
 }
 
 .header a {
@@ -68,20 +78,17 @@
     grid-area: logo;
     font-family: 'Mynerve', cursive;
     font-size: 8em;
-    /* width: 20%; */
 }
 
 .heading {
     grid-area: heading;
     font-family: 'Mynerve', cursive;
     font-size: 5em;
-    /* width: 50%; */
     color: rgb(192, 192, 192);
 }
 .shopping-bag {
     grid-area: shopping-bag;
     width: 8em;
-    /* width: 20%; */
     position: relative;
 }
 
@@ -105,7 +112,6 @@
     border-radius: 1.2em;
 }
 
-
 .nav {
     grid-area: nav;
     width: 100%;
@@ -124,7 +130,10 @@
     justify-content: space-around;
 }
 .nav ul li {
-    display: inline;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 }
 
 .nav ul li a {
@@ -135,6 +144,23 @@
     font-size: 3em;
 }
 
+.nav ul li .underline {
+    background-color: black;
+    display: block;
+    height: 3px;
+    border-radius: 5px;
+    animation: grow 1s forwards;
+}
+
+@keyframes grow {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;;
+    }
+}
+
 .products-wrapper {
     max-width: 1200px;
     margin-left: auto;
@@ -143,14 +169,10 @@
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-        /* align-items: center; */
 }
-
-
 
 /* STYLING PRODUCT BOX  */
 .product {
-    /* border: 1px solid black; */
     margin: 1em 0.2em;
     padding: 0 1em 0 1em;
     font-family: 'Schibsted Grotesk', sans-serif;
@@ -164,31 +186,15 @@
         "product-price ."
         "cart-form cart-form";
 
-    /* justify-items: center;
-    align-items: center; */
-    /* width: 200px; */
     width: 100%;
     max-width: 365px;
-    /* align-self: center; */
     box-shadow: 0px 1em 0.5em -0.5em rgba(0, 0, 0, 0.1);
-    /* border: 1px solid red; */
     border-radius: 0 0 1.4em 1.4em;
-    
-   
 }
-
-/* @media (min-width: 1000px) {
-    .product {
-        
-    }
-} */
 
 .product .product-image-box {
     grid-area: product-image;
     position: relative;
-    /* width: 100%; */
-    /* should add a max width here when sizing site upwards? */
-    /* max-width: 1000px; */
     overflow: hidden;
 }
 
@@ -198,7 +204,6 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     aspect-ratio: 3 / 4;
-    /* an aspect ratio here could help with standardization */
 }
 
 .product .product-image-box .slider .product-image {
@@ -228,16 +233,13 @@
     transition: opcacity ease 250ms;
 }
 
-/* MAYBE JUST REMOVE THESE AND HAVE THE IMAGES MOVE ON THEIR OWN WHEN THE SITE IS FIRST LOADED */
+/* CONSIDERING REMOVING THESE AND HAVE THE IMAGES MOVE ON THEIR OWN WHEN THE SITE IS FIRST LOADED */
 .product .product-image-box .slider-buttons a:hover {
     opacity: 1;
 }
 
-
 .product .product-name {
     grid-area: product-name;    
-    /* font-family: 'DynaPuff', cursive; */
-    /* font-family: 'Lilita One', cursive; */
     font-family: 'Bebas Neue', cursive;
     font-weight: bold;
     font-size: 3em;
@@ -245,8 +247,6 @@
 
 .product .product-price {
     grid-area: product-price;
-    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
-    /* font-family: Arial, Helvetica, sans-serif; */
     font-weight: bold;
     font-size: 1.5em;
 }
@@ -254,11 +254,6 @@
 .product .cart-form {
     grid-area: cart-form;
     margin: 0.5em 0;
-    /* display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center; */
-
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
@@ -275,13 +270,11 @@ input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
     text-align: center;
-    /* position: relative; */
 }
   input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
-
 
 .product-quantity {
     grid-area: product-quantity;
@@ -321,12 +314,7 @@ input[type="number"] {
 .product .cart-form .product-size {
     background-color: rgb(192, 192, 192);
     grid-area: product-size;
-    /* padding: 0.5em; */
     display: inline-flex;
-    /* justify-content: space-between; */
-    /* display: inline-block;
-    overflow: hidden;
-    border-radius: 2em;  */
     border-radius: 1.5em;
     overflow: hidden;
     margin: 0.5em 0;
@@ -334,15 +322,26 @@ input[type="number"] {
 
 .size-label {
     background-color: rgb(192, 192, 192);
-    /* padding: 0 1em 0 1em; */
     font-size: 1.5em;
     font-weight: bold;
     padding: 0.5em 0.8em;
     cursor: pointer;
 }
 
+.out-of-stock {
+    color: rgb(92, 92, 92);
+    background-color: rgb(192, 192, 192);
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 0.5em 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    margin: 0.5em 0;
+}
+
 .product .cart-form .invalid-size .size-label{
-    /* background-color: rgb(171, 82, 82); */
     color: rgb(198, 51, 51);
     animation: shake 0.5s;
 }
@@ -380,7 +379,6 @@ input[type="number"] {
     padding: 0.3em 0.5em;
     font-size: 1.8em;
     border-radius: 0.5em;
-    /* font-weight: 600; */
     font-family: 'Bebas Neue', cursive;
     cursor: pointer;
 }
@@ -391,9 +389,7 @@ input[type="number"] {
     font-size: 1em;
     font-weight: bold;
     color: rgb(92, 92, 92);
-    /* display: none; */
 }
-
 
 /* STYLING CART PAGE  */
 .cart-wrapper {
@@ -405,12 +401,16 @@ input[type="number"] {
     align-items: center;
 }
 
-.cart-title {
+.cart-title, .error-title {
     margin: 1em;
     font-family: 'Schibsted Grotesk', sans-serif;
     font-weight: bold;
     font-size: 1.8em;
     box-shadow: 0px 1px rgba(0, 0, 0, 1);
+}
+
+.error-title {
+    box-shadow: none;
 }
 
 .cart-item {
@@ -514,20 +514,141 @@ input[type="number"] {
     font-size: 1.5em;
 }
 
-.subtotal-label {
-    /* display: flex; */
+.contact-wrapper {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 3em;
+    gap: 1em;
 }
 
+.contact-instagram {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1em;
+}
 
+.instagram-link-wrappper {
+    flex-grow: 1;
+}
 
+.instagram-link {
+    text-decoration: none;
+}
 
+.instagram-photo-wrapper {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+}
 
+.instagram-photo {
+    width: 100%;
+    border: 1px solid black;
+    border-width: 20px 10px 50px 10px;
+    border-radius: 1em;
+}
 
+.dot {
+    margin: 0 auto;
+    width: 40px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: rgb(100, 100, 100);
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+}
 
+.contact-email {
+    width: 100%;
+    background-color: black;
+    color: white;
+    padding: 1em;
+    justify-content: center;
+    text-align: center;
+}
+
+.contact-email a {
+    color: white;
+}
+
+.gallery-wrapper {
+    padding: 1em 0.5em;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-areas: 
+    "img1 img2 img3"
+    "img4 img5 img6"
+    "img7 img7 img7"
+    "img8 img9 img9"
+    "img10 img10 img11";
+    gap: 0.5em;
+    align-items: center;
+}
+
+.gallery-wrapper img {
+    max-width: 100%;
+    object-fit: cover;
+}
+
+.img1 {
+    grid-area: img1;
+}
+
+.img2 {
+    grid-area: img2;
+}
+
+.img3 {
+    grid-area: img3;
+}
+
+.img4 {
+    grid-area: img4;
+}
+
+.img5 {
+    grid-area: img5;
+}
+
+.img6 {
+    grid-area: img6;
+}
+
+.img7 {
+    grid-area: img7;
+}
+
+.img8 {
+    grid-area: img8;
+}
+
+.img9 {
+    grid-area: img9;
+}
+
+.img10 {
+    grid-area: img10;
+}
+
+.img11 {
+    grid-area: img11;
+}
 
 @media (max-width: 1200px) {
     .header {
-        font-size: 1vw;
+        font-size: 0.5em;
     }
     .footer {
         font-size: 1vw;
@@ -544,14 +665,25 @@ input[type="number"] {
         "product-image product-price"
         "product-image product-quantity"
         "product-total remove ";
-        /* align-items: center;
-        justify-items: center; */
         align-content: center;
         padding-bottom: 1em;
     }
     .cart-item .product-image {
-        /* width: 20em; */
         width: 40vw;
+    }
+    .contact-instagram {
+        flex-wrap: wrap;
+    }
+    .instagram-photo, .dot {
+        display: none;
+    }
+    .instagram-link-wrappper {
+        font-size: 8vw;
+    }
+    
+    .contact-email {
+        padding: 0.5em;
+        font-size: 8vw;
     }
 
 }
@@ -562,5 +694,15 @@ input[type="number"] {
     }
     .footer {
         font-size: 1.5vw;
+    }
+    .contact-wrapper {
+        gap: 0.5em;
+    }
+    .contact-instagram {
+        flex-wrap: wrap;
+        gap: 0
+    }
+    .instagram-link-wrappper, .contact-email {
+        font-size: 6vw;
     }
 }

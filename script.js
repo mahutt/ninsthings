@@ -27,14 +27,6 @@ function selected(label) {
     }
 }
 
-// APPLYING THE selected() FUNCTION TO ALL LABELS
-const sizeLabels = document.querySelectorAll(".size-label");
-for (var i = 0; i < sizeLabels.length; i++) {
-    sizeLabels[i].addEventListener('click', function() {
-        selected(this);
-    });
-}
-
 // VALIDATE FORM WHEN 'ADDING TO CART'
 function validateCartForm(form) {
     const radios = form.querySelectorAll(".size-radio");
@@ -52,6 +44,22 @@ function validateCartForm(form) {
     return false;
 }
 
-// MARK OFF SIZE LABEL IF IT IS THE ONLY SIZE AVAILABLE
+// APPLYING THE selected() FUNCTION TO ALL LABELS
+const sizeLabels = document.querySelectorAll(".size-label");
+for (var i = 0; i < sizeLabels.length; i++) {
+    sizeLabels[i].addEventListener('click', function() {
+        selected(this);
+    });
+}
 
-// CHANGE MAX VALUE OF A PRODUCT WHEN SIZE IS SELECTED - (based off size) - ALSO DISPLAY IT SOMEWHERE?
+// APPLYING UNDERLINE UNDER ACTIVE NAV ITEM
+console.log("HI");
+const url = window.location.href;
+const navitems = document.querySelectorAll(".nav-item");
+for (let i = 0; i < navitems.length; i++) {
+    console.log(navitems[i].href);
+    if (navitems[i].href == url) {
+        navitems[i].parentNode.innerHTML += "<span class=\"underline\"></span>";
+        break;
+    }
+}

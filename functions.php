@@ -10,7 +10,7 @@ function console($data) {
 
 // STREAMLINING PDO OBJECT CREATION
 function pdo_connect_mysql() {
-    // Update the details below with your MySQL details***
+    // Below SQL details need to be specified (currently should work for a local XAMP server):
     $DATABASE_HOST = 'localhost';
     $DATABASE_USER = 'root';
     $DATABASE_PASS = '';
@@ -53,21 +53,13 @@ function getquantity($str) {
     return $quantity;
 }
 
-// CURRENTLY HERE
-// RETURNS UPDATED SIZE_QUANTITY VALUE GIVEN THE $PRODUCTS IN DB, $ID & $SIZE TO UPDATE AND $QUANTITY TO REMOVE
-function update_size_quantity($products, $id, $size, $quantity) {
-    $currentQuantities = explode(",", $products[$id]['size_quantity']);
-    foreach ($currentQuantities as $currentQuantity) {
-        $currentQuantity = explode(":", $currentQuantity);
-        if ($currentQuantity[0] = $size && ($currentQuantity[1] - $quantity) >= 0) { // how to handle if 0 is new quantity? what to return if less than zero?
-            $currentQuantity[1] -= $quantity;
-        }  
-    }
-}
-
 // TEMPLATE HEADER
 function template_header($title) {
 $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+$bubble = "";
+if ($num_items_in_cart > 0) {
+    $bubble = "<span class=\"cart-counter\">$num_items_in_cart</span>";
+}
 echo <<<EOT
 <!DOCTYPE html>
 <html lang="en">
@@ -88,14 +80,14 @@ echo <<<EOT
             <div class="shopping-bag">
                 <a href="index.php?page=cart">
                     <img src="img/bag.png">
-                    <span class="cart-counter">$num_items_in_cart</span>
+                    $bubble
                 </a>
             </div>
             <nav class="nav">
                 <ul>
-                    <li><a href="index.php?page=products">PRODUCTS</a></li>
-                    <li><a href="index.php?page=home">HOME</a></li>
-                    <li><a href="index.php?page=contact">CONTACT</a></li>
+                    <li><a class="nav-item" href="index.php?page=gallery">GALLERY</a></li>
+                    <li><a class="nav-item" href="index.php?page=home">HOME</a></li>
+                    <li><a class="nav-item" href="index.php?page=contact">CONTACT</a></li>
                 </ul>
             </nav>
         </div>
@@ -117,6 +109,7 @@ echo <<<EOT
             </div>
         </footer>
     </body>
+    <script type="text/javascript" src="script.js"></script>
 </html>
 EOT;
 }

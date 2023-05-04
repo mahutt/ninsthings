@@ -107,18 +107,63 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
     \Stripe\Stripe::setApiKey($stripeSecretKey); # Defined in secrets.php
     $DOMAIN = 'http://localhost/nins/';
 
-    // CREATING LINE ITEMS & UPDATING DB?
-    $line_items = array();
+    // SAVING ORIGINAL QUANTITIES DATA IN SESSION VARIABLE
+    $_SESSION['quantity_backup'] = array();
+    foreach ($products as $product) {
+        $_SESSION['quantity_backup'][$product['id']] = $product['size_quantity'];
+    }
+
+    // UPDATING DB
     $query = $pdo->prepare('UPDATE products SET size_quantity = :new_size_quantity WHERE id = :id');
+    foreach ($products as $product) {
+        $currentQuantities = array();
+        foreach (explode(",", $product['size_quantity']) as $size_quantity_pair) {
+            if ($size_quantity_pair != "OUT OF STOCK") {
+                list($size_key, $quantity_value) = explode(":", $size_quantity_pair);
+                $currentQuantities[$size_key] = $quantity_value;
+            }
+        }
+        foreach ($products_in_cart as $id_size => $request) { 
+            $id = (int)explode(",", $id_size)[0]; 
+            $size = explode(",", $id_size)[1];
+            if ($id == $product['id']) {
+                if (!isset($currentQuantities[$size]) || ((int)$currentQuantities[$size] - $request) < 0) {
+                    // HANDLE INVALID AMOUNT
+                    $_SESSION['stock-error'] = $products[$id]['name'];
+                    unset($_SESSION['cart'][$id_size]);
+                    header('location: index.php?page=cancel');
+                    exit;
+                } 
+                $currentQuantities[$size] = (int)$currentQuantities[$size] - $request;                
+                if ($currentQuantities[$size] == 0) {
+                    unset($currentQuantities[$size]);
+                }
+            }
+        }
+        if (count($currentQuantities) === 0) {
+            $size_quantity = "OUT OF STOCK";
+        } else {
+            $newQuantities = array();
+            foreach ($currentQuantities as $size_key => $quantity_value) {
+                $newQuantities[] = $size_key.":".$quantity_value;
+            }
+            $size_quantity = implode(",", $newQuantities);
+        }
+        // echo $size_quantity."<br>";// TESTING
+        $query->bindParam(':new_size_quantity', $size_quantity, PDO::PARAM_STR);
+        $query->bindParam(':id', $product['id'], PDO::PARAM_INT);
+        $query->execute();
+    }
+
+
+
+
+
+    // CREATING LINE ITEMS
+    $line_items = array();
     foreach ($products_in_cart as $id_size => $quantity) {
         $id = (int)explode(",", $id_size)[0]; 
         $size = explode(",", $id_size)[1];
-
-        // UPDATING DB
-        $size_quantity = update_size_quantity($products, $id, $size, $quantity); // define new size_quantity using a function (to be defined) 
-        $stmt->bindParam(':quantity', $item['quantity'], PDO::PARAM_INT);
-        $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
-        $stmt->execute();
 
         // CREATING LINE ITEM
         $line_item = array(
@@ -202,5 +247,5 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
     <?php endif; ?>
 </form>
 
-<script type="text/javascript" src="script.js"></script>
+
 <?=template_footer()?>
