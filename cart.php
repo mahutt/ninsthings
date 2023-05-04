@@ -147,7 +147,7 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
                 'product_data' => array(
                     'name' => $products[$id]['name'],
                     'description' => $size,
-                    'images' => array($DOMAIN.'products/'.$products[$id]['img'].'/1.jpg'),
+                    'images' => array($DOMAIN.'products/'.$products[$id]['img'].'/3.jpg'),
                 ),
             ),
             'quantity' => $quantity,
@@ -169,8 +169,6 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
     header("Location: " . $checkout_session->url);
     exit;
 }
-
-
 
 ?>
 <?=template_header('cart')?>
