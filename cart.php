@@ -1,8 +1,4 @@
 <?php
-foreach ($_POST as $key => $value) {
-    console($key." => ".$value);
-}
-
 // IF USER CLICKED "ADD TO CART":
 if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeric($_POST['product-id']) && is_numeric($_POST['quantity'])) {
     $id = (int)$_POST['product-id'];
@@ -74,29 +70,11 @@ if ($products_in_cart) {
         $products[$product['id']] = $product;
     }
 
-    // 
-    // console(sizeof($products_in_cart));
-    // console(sizeof($products));
-
     // CALCULATING SUBTOTAL
     foreach ($products_in_cart as $id_size => $quantity) {
-        
         $id = (int)explode(",", $id_size)[0];
-
         $subtotal += (float)$products[$id]['price'] * (int)$quantity;
-
-        // foreach ($products as $product) {
-        //     if ($product['id'] = $id) {
-                
-        //     }
-        // }
     }
-
-
-    // foreach ($products as $product) {
-    //     echo $product['id'];
-    //     $subtotal += (float)$product['price'] * (int)$products_in_cart[$product['id']];
-    // }
 }
 
 // CHECKING WHETHER CART IS EMPTY BEFORE CHECKING OUT
@@ -155,10 +133,6 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
         $query->execute();
     }
 
-
-
-
-
     // CREATING LINE ITEMS
     $line_items = array();
     foreach ($products_in_cart as $id_size => $quantity) {
@@ -173,8 +147,7 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
                 'product_data' => array(
                     'name' => $products[$id]['name'],
                     'description' => $size,
-                    'images' => array('https://pawdoption.000webhostapp.com/nins/products/KISSES/1.jpg'), // for testing (temp)
-                    // 'images' => array($DOMAIN.'products/'.$products[$id]['img'].'/1.jpg'),
+                    'images' => array($DOMAIN.'products/'.$products[$id]['img'].'/1.jpg'),
                 ),
             ),
             'quantity' => $quantity,
@@ -201,7 +174,6 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
 
 ?>
 <?=template_header('cart')?>
-<!-- BUILD CART PAGE HERE (9.6)  -->
 <form action="index.php?page=cart" method="post">
     <div class="cart-wrapper">
         <?php if (empty($products)): ?>
@@ -246,6 +218,5 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
     </div>
     <?php endif; ?>
 </form>
-
 
 <?=template_footer()?>
