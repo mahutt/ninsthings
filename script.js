@@ -32,6 +32,7 @@ function validateCartForm(form) {
     const radios = form.querySelectorAll(".size-radio");
     for (let i = 0; i < radios.length; i++) {
         if (radios[i].checked) {
+            displaySpinner();
             return true;
         }
     }
@@ -44,16 +45,30 @@ function validateCartForm(form) {
     return false;
 }
 
+// DISPLAYING SPINNER WHEN ATTEMPTING REDIRECT
+function displaySpinner() {
+    document.querySelector('.spinner-wrapper').style.display = 'flex';
+    console.log('ran');
+}
+
+// APPLYING DISPLAY-SPINNER ONCLICK TO ALL RELEVANT ANCHOR TAGS / SUBMIT BUTTONS
+const redirects = document.querySelectorAll('.redirect');
+for (let i = 0; i < redirects.length; i++) {
+    redirects[i].onclick = function() {
+        displaySpinner();
+    };
+    console.log('applied');
+}
+
 // APPLYING THE selected() FUNCTION TO ALL LABELS
 const sizeLabels = document.querySelectorAll(".size-label");
-for (var i = 0; i < sizeLabels.length; i++) {
+for (let i = 0; i < sizeLabels.length; i++) {
     sizeLabels[i].addEventListener('click', function() {
         selected(this);
     });
 }
 
 // APPLYING UNDERLINE UNDER ACTIVE NAV ITEM
-console.log("HI");
 const url = window.location.href;
 const navitems = document.querySelectorAll(".nav-item");
 for (let i = 0; i < navitems.length; i++) {

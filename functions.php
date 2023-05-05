@@ -75,25 +75,28 @@ echo <<<EOT
     <header>
         <div class="header-wrapper">
         <div class="header">
-            <a href="index.php?page=home"><h1 class="logo">N</h1></a>
+            <a class="redirect" href="index.php?page=home"><h1 class="logo">N</h1></a>
             <h1 class="heading">nin's things</h1>
             <div class="shopping-bag">
-                <a href="index.php?page=cart">
+                <a class="redirect" href="index.php?page=cart">
                     <img src="img/bag.png">
                     $bubble
                 </a>
             </div>
             <nav class="nav">
                 <ul>
-                    <li><a class="nav-item" href="index.php?page=gallery">GALLERY</a></li>
-                    <li><a class="nav-item" href="index.php?page=home">HOME</a></li>
-                    <li><a class="nav-item" href="index.php?page=contact">CONTACT</a></li>
+                    <li><a class="nav-item redirect" href="index.php?page=gallery">GALLERY</a></li>
+                    <li><a class="nav-item redirect" href="index.php?page=home">HOME</a></li>
+                    <li><a class="nav-item redirect" href="index.php?page=contact">CONTACT</a></li>
                 </ul>
             </nav>
         </div>
         </div>
     </header>
     <main>
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+        </div>
 EOT;
 }
 // TEMPLATE FOOTER

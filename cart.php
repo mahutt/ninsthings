@@ -193,7 +193,7 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
                     <input class="quantity-number" type="number" name="quantity-<?=$id_size?>" value="<?=$quantity?>" min="1" max="<?=$getMax[$size]?>" required>
                     <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
                 </div>
-                <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove">Remove</a>
+                <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove redirect">Remove</a>
                 <div class="product-total">
                     <div class="label">Subtotal</div>
                     <div class="price">&dollar;<?=$products[$id]['price'] * $quantity?></div>
@@ -205,13 +205,13 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
     </div>
     <?php if (!empty($products)): ?>
     <div class="cart-place-order">
-        <input class="update-button" type="submit" value="update quantities" name="update">
+        <input class="update-button redirect" type="submit" value="update quantities" name="update">
         <div class="buttons">
             <div class="subtotal">
                 <div class="subtotal-label">Subtotal:&nbsp</div>
                 <div class="subtotal-value">&dollar;<?=$subtotal?></div>
             </div>
-            <input class="order-submit" type="submit" value="checkout" name="placeorder">
+            <input class="order-submit redirect" type="submit" value="checkout" name="placeorder">
         </div>
     </div>
     <?php endif; ?>
