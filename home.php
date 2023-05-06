@@ -29,7 +29,7 @@ $products = $query->fetchAll(PDO::FETCH_ASSOC); // FETCHING AS AN ASSOCIATIVE AR
             <input name="product-id" type="hidden" value="<?=$product['id']?>">
             <div class="product-quantity">
                 <input name="quantity" class="quantity-number" type="number" value="1" min="1" max="100" required>
-                <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
+                <a onclick="step(this, -1)" class="decrement-button"><div class="decrement-symbol">&#8722</div></a><a onclick="step(this, 1)" class="increment-button"><div class="increment-symbol">&#43</div></a>         
             </div>
             <div class="product-size">
                 <?php foreach (getQuantityPerSize($product['size_quantity']) as $size => $quantity): ?>

@@ -191,7 +191,7 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
                 <div class="product-quantity">
                     <?php $getMax = getQuantityPerSize($products[$id]['size_quantity']); ?>
                     <input class="quantity-number" type="number" name="quantity-<?=$id_size?>" value="<?=$quantity?>" min="1" max="<?=$getMax[$size]?>" required>
-                    <a onclick="step(this, -1)" class="decrement-button">&#10094</a><a onclick="step(this, 1)" class="increment-button">&#10095</a>         
+                    <a onclick="step(this, -1)" class="decrement-button"><div class="decrement-symbol">&#8722</div></a><a onclick="step(this, 1)" class="increment-button"><div class="increment-symbol">&#43</div></a>         
                 </div>
                 <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove redirect">Remove</a>
                 <div class="product-total">

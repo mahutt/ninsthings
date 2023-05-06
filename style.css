@@ -327,9 +327,17 @@ input[type="number"] {
     color: rgb(255, 255, 255);
     font-weight: bold;
     font-size: 1.5em;
-    padding: 0.25em 0.5em;
     height: 2em;
+    width: 1.5em;
     position: absolute;
+}
+
+.decrement-symbol, .increment-symbol {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .product-quantity .decrement-button, .increment-button:hover {
