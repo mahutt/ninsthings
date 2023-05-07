@@ -155,8 +155,65 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
         array_push($line_items, $line_item);
     }
 
+    // DEFINING SHIPPING OPTIONS BASED ON LOCATION
+    function getShipping($address) {
+        if ($address->city == 'Montreal') {
+            return [[
+                'shipping_rate_data' => [
+                    'type' => 'fixed_amount',
+                    'fixed_amount' => ['amount' => 0, 'currency' => 'cad'],
+                    'display_name' => 'Free Shipping to Montreal',
+                    'delivery_estimate' => [
+                        'minimum' => ['unit' => 'week', 'value' => 1],
+                        'maximum' => ['unit' => 'week', 'value' => 2],
+                    ],
+                ],
+            ]];
+        } else {
+            return [[
+                'shipping_rate_data' => [
+                    'type' => 'fixed_amount',
+                    'fixed_amount' => ['amount' => 800, 'currency' => 'cad'],
+                    'display_name' => 'Standard Shipping (Outside Montreal)',
+                    'delivery_estimate' => [
+                        'minimum' => ['unit' => 'week', 'value' => 1],
+                        'maximum' => ['unit' => 'week', 'value' => 2],
+                    ],
+                ],
+            ]];
+        }
+    }
+
     // CREATING CHECKOUT SESSION
     $checkout_session = \Stripe\Checkout\Session::create(array(
+        'shipping_address_collection' => ['allowed_countries' => ['US', 'CA']],
+        
+        'shipping_options' => 
+        [
+            [
+              'shipping_rate_data' => [
+                'type' => 'fixed_amount',
+                'fixed_amount' => ['amount' => 800, 'currency' => 'cad'],
+                'display_name' => 'Standard Shipping',
+                'delivery_estimate' => [
+                  'minimum' => ['unit' => 'week', 'value' => 1],
+                  'maximum' => ['unit' => 'week', 'value' => 2],
+                ],
+              ],
+            ],
+            [
+              'shipping_rate_data' => [
+                'type' => 'fixed_amount',
+                'fixed_amount' => ['amount' => 0, 'currency' => 'cad'],
+                'display_name' => 'Free Shipping to Montreal',
+                'delivery_estimate' => [
+                  'minimum' => ['unit' => 'week', 'value' => 1],
+                  'maximum' => ['unit' => 'week', 'value' => 2],
+                ],
+              ],
+            ],
+        ],
+
         'payment_method_types' => array('card'),
         'line_items' => $line_items,
         'mode' => 'payment',
