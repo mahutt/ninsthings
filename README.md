@@ -1,4 +1,4 @@
-# ninsthings online store (in progress)
+# ninsthings online store
 
 ninsthing is hosted at ninsthings.com as an online store for @ninstotes
 on instagram. 
