@@ -53,6 +53,16 @@ function getquantity($str) {
     return $quantity;
 }
 
+// VERIFIES WHETHER GIVEN ITEM'S STOCK ROW IS EMPTY
+function isEmpty($stock) {
+    foreach ($stock as $size => $quantity) {
+        if ($size != 'id' && $quantity > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // TEMPLATE HEADER
 function template_header($title) {
 $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
