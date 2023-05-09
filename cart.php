@@ -39,7 +39,7 @@ if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeri
 
 // IF USER CLICKED "REMOVE":
 if (isset($_GET['remove']) && isset($_SESSION['cart']) && isset($_SESSION['cart'][$_GET['remove']])) {
-    unset($_SESSION['cart'][$_GET['remove']]);
+    unset($_SESSION['cart'][$_GET['remove']]); 
 }
 
 // UPDATING PRODUCT QUANTITIES FROM CART.PHP:
@@ -47,9 +47,16 @@ if (isset($_POST['update']) && isset($_SESSION['cart'])) {
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'quantity') !== false && is_numeric($value)) {
             $id_size = str_replace('quantity-', '', $key);
-            $quantity = (int)$value;
-            if (isset($_SESSION['cart'][$id_size]) && $quantity > 0) {
-                $_SESSION['cart'][$id_size] = $quantity;
+            $newQuantity = (int)$value;
+            list($id, $size) = explode(",", $id_size);
+            $stock = getStock($id);
+            if (isset($_SESSION['cart'][$id_size]) && $newQuantity > 0) {
+                if ($newQuantity <= $stock[$id]) {
+                    $_SESSION['cart'][$id_size] = $newQuantity;
+                } else {
+                    echo "Cannot add more";// HANDLE THE CASE WHERE WE CANNOT ADD QUANTITY DUE TO INSUFFICIENT STOCK --> use modal?
+                }
+                
             }
         }
     }
@@ -57,23 +64,21 @@ if (isset($_POST['update']) && isset($_SESSION['cart'])) {
     exit;
 }
 
+// SELECTING PRODUCTS IN CART FROM DB IF THERE ARE ANY
 $products_in_cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : array();
 $products = array();
 $subtotal = 0.00;
-
-// SELECTING PRODUCTS IN CART FROM DB IF THERE ARE ANY
 if ($products_in_cart) {
+    // OBTAINING ASSOCIATIVE ARRAY OF PRODUCTS IN CART ID => PRODUCT DATA
     $array_to_question_marks = implode(',', array_fill(0, count($products_in_cart), '?'));
-    $query = $pdo->prepare('SELECT * FROM products WHERE id IN ('.$array_to_question_marks.')');
-    
+    $statement = $pdo->prepare('SELECT * FROM products WHERE id IN ('.$array_to_question_marks.')');
     $ids_sizes = array_keys($products_in_cart);
     $ids = array();
     foreach ($ids_sizes as $id_size) {
         $ids[] = (int)explode(",", $id_size)[0];
     }
-
-    $query->execute($ids);
-    $unlisted_products = $query->fetchAll(PDO::FETCH_ASSOC);
+    $statement->execute($ids);
+    $unlisted_products = $statement->fetchAll(PDO::FETCH_ASSOC);
     foreach ($unlisted_products as $product) {
         $products[$product['id']] = $product;
     }
@@ -99,47 +104,62 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
         $_SESSION['quantity_backup'][$product['id']] = $product['size_quantity'];
     }
 
-    // UPDATING DB
-    $query = $pdo->prepare('UPDATE products SET size_quantity = :new_size_quantity WHERE id = :id');
-    foreach ($products as $product) {
-        $currentQuantities = array();
-        foreach (explode(",", $product['size_quantity']) as $size_quantity_pair) {
-            if ($size_quantity_pair != "OUT OF STOCK") {
-                list($size_key, $quantity_value) = explode(":", $size_quantity_pair);
-                $currentQuantities[$size_key] = $quantity_value;
-            }
-        }
-        foreach ($products_in_cart as $id_size => $request) { 
-            $id = (int)explode(",", $id_size)[0]; 
-            $size = explode(",", $id_size)[1];
-            if ($id == $product['id']) {
-                if (!isset($currentQuantities[$size]) || ((int)$currentQuantities[$size] - $request) < 0) {
-                    // HANDLE INVALID AMOUNT
-                    $_SESSION['stock-error'] = $products[$id]['name'];
-                    unset($_SESSION['cart'][$id_size]);
-                    header('location: index.php?page=cancel');
-                    exit;
-                } 
-                $currentQuantities[$size] = (int)$currentQuantities[$size] - $request;                
-                if ($currentQuantities[$size] == 0) {
-                    unset($currentQuantities[$size]);
-                }
-            }
-        }
-        if (count($currentQuantities) === 0) {
-            $size_quantity = "OUT OF STOCK";
+    // UPDATING DB (PRIOR TO ATTEMPTING CHECKOUT)
+    foreach ($products_in_cart as $id_size => $requestedQuantity) {
+        list($id, $size) = explode(",", $id_size);
+        $stock = getStock($id);
+        if ($stock[$size] >= $requestedQuantity) { // update 
+            $newQuantity = $stock[$size] - $requestedQuantity;
+            $statement = $pdo->prepare("UPDATE stock SET $size = :new_quantity WHERE id = :id");
+            $statement->bindParam(':new_quantity', $newQuantity, PDO::PARAM_INT);
+            $statement->bindParam(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
         } else {
-            $newQuantities = array();
-            foreach ($currentQuantities as $size_key => $quantity_value) {
-                $newQuantities[] = $size_key.":".$quantity_value;
-            }
-            $size_quantity = implode(",", $newQuantities);
+            $_SESSION['stock-error'] = $products[$id]['name'];
+            $_SESSION['cart'][$id_size] = $stock[$size];
+            header('location: index.php?page=cancel'); // explain that we had too many of a specific product, use modal?
+            exit;
         }
-        // echo $size_quantity."<br>";// TESTING
-        $query->bindParam(':new_size_quantity', $size_quantity, PDO::PARAM_STR);
-        $query->bindParam(':id', $product['id'], PDO::PARAM_INT);
-        $query->execute();
     }
+    // foreach ($products as $product) {
+    //     $currentQuantities = array();
+    //     foreach (explode(",", $product['size_quantity']) as $size_quantity_pair) {
+    //         if ($size_quantity_pair != "OUT OF STOCK") {
+    //             list($size_key, $quantity_value) = explode(":", $size_quantity_pair);
+    //             $currentQuantities[$size_key] = $quantity_value;
+    //         }
+    //     }
+    //     foreach ($products_in_cart as $id_size => $request) { 
+    //         $id = (int)explode(",", $id_size)[0]; 
+    //         $size = explode(",", $id_size)[1];
+    //         if ($id == $product['id']) {
+    //             if (!isset($currentQuantities[$size]) || ((int)$currentQuantities[$size] - $request) < 0) {
+    //                 // HANDLE INVALID AMOUNT
+    //                 $_SESSION['stock-error'] = $products[$id]['name'];
+    //                 unset($_SESSION['cart'][$id_size]);
+    //                 header('location: index.php?page=cancel');
+    //                 exit;
+    //             } 
+    //             $currentQuantities[$size] = (int)$currentQuantities[$size] - $request;                
+    //             if ($currentQuantities[$size] == 0) {
+    //                 unset($currentQuantities[$size]);
+    //             }
+    //         }
+    //     }
+    //     if (count($currentQuantities) === 0) {
+    //         $size_quantity = "OUT OF STOCK";
+    //     } else {
+    //         $newQuantities = array();
+    //         foreach ($currentQuantities as $size_key => $quantity_value) {
+    //             $newQuantities[] = $size_key.":".$quantity_value;
+    //         }
+    //         $size_quantity = implode(",", $newQuantities);
+    //     }
+    //     // echo $size_quantity."<br>";// TESTING
+    //     $query->bindParam(':new_size_quantity', $size_quantity, PDO::PARAM_STR);
+    //     $query->bindParam(':id', $product['id'], PDO::PARAM_INT);
+    //     $query->execute();
+    // }
 
     // CREATING LINE ITEMS
     $line_items = array();
@@ -254,8 +274,8 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
                 </div>
                 <div class="product-price">&dollar;<?=$products[$id]['price']?> CAD</div>
                 <div class="product-quantity">
-                    <?php $getMax = getQuantityPerSize($products[$id]['size_quantity']); ?>
-                    <input class="quantity-number" type="number" name="quantity-<?=$id_size?>" value="<?=$quantity?>" min="1" max="<?=$getMax[$size]?>" required>
+                    <?php $stock = getStock($id); ?>
+                    <input class="quantity-number" type="number" name="quantity-<?=$id_size?>" value="<?=$quantity?>" min="1" max="<?=$stock[$size]?>" required>
                     <a onclick="step(this, -1)" class="decrement-button"><div class="decrement-symbol">&#8722</div></a><a onclick="step(this, 1)" class="increment-button"><div class="increment-symbol">&#43</div></a>         
                 </div>
                 <a href="index.php?page=cart&remove=<?=$id_size?>" class="remove redirect">Remove</a>

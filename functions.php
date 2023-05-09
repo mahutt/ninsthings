@@ -33,6 +33,7 @@ function getsizes($str) {
 }
 
 // TRANSFORMS THE SQL QUANTITY/SIZE STRING INTO A PHP ARRAY OF KEY-VALUE PAIRS
+// REMOVE THIS!!
 function getQuantityPerSize($str) {
     $sizes_quantities = explode(",", $str);
     $quantities_per_size = array();
@@ -61,6 +62,14 @@ function isEmpty($stock) {
         }
     }
     return true;
+}
+
+// FETCHING TO CHECK WETHER THERE IS ENOUGH STOCK
+function getStock($stock_id) {
+    global $pdo;
+    $statement = $pdo->prepare('SELECT * FROM stock WHERE id = ?');
+    $statement->execute([$stock_id]);
+    return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
 // TEMPLATE HEADER
