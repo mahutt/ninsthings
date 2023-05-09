@@ -5,18 +5,26 @@ if (isset($_POST['product-id'], $_POST['quantity'], $_POST['size']) && is_numeri
     $quantity = (int)$_POST['quantity'];
     $size = $_POST['size'];
 
-    $query = $pdo->prepare('SELECT * FROM products WHERE id = ?');
-    $query->execute([$_POST['product-id']]);
-    
-    $product = $query->fetch(PDO::FETCH_ASSOC);
+    // FETCHING TO CHECK WHETHER THE PRODUCT EXISTS
+    $statement = $pdo->prepare('SELECT * FROM products WHERE id = ?');
+    $statement->execute([$_POST['product-id']]);
+    $product = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // FETCHING TO CHECK WETHER THERE IS ENOUGH STOCK
+    $statement = $pdo->prepare('SELECT * FROM stock WHERE id = ?');
+    $statement->execute([$product['stock_id']]);
+    $stock = $statement->fetch(PDO::FETCH_ASSOC);
 
     if ($product && $quantity > 0) {
-
         if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             
             // UPDATING QUANTITY IF PRODUCT ALREADY EXISTS IN CART:
             if (array_key_exists($id.",".$size, $_SESSION['cart'])) {
-                $_SESSION['cart'][$id.",".$size] += $quantity; 
+                if ($_SESSION['cart'][$id.",".$size] + $quantity <= $stock[$size]) {
+                    $_SESSION['cart'][$id.",".$size] += $quantity;
+                } else {
+                    echo "Cannot add more";// HANDLE THE CASE WHERE WE CANNOT ADD THIS ITEM AGAIN TO CART DUE TO INSUFFICIENT STOCK
+                }
             } else {
                 $_SESSION['cart'][$id.",".$size] = $quantity;
             }
