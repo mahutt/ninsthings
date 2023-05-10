@@ -12,7 +12,12 @@ function step(anchor, stepDirection) {
 
 // SIZE-SELECT
 function selected(label) {
-    const labels = label.parentNode.querySelectorAll('label');
+    const labelWrapper = label.parentNode;
+    if (labelWrapper.classList.contains("invalid-size")) {
+        labelWrapper.classList.remove("invalid-size");
+        labelWrapper.offsetWidth;
+    }
+    const labels = labelWrapper.querySelectorAll('label');
     for (var i = 0; i < labels.length; i++) {
         if (labels[i].classList.contains("selected-size"))
             labels[i].classList.remove("selected-size");
@@ -49,6 +54,14 @@ function validateCartForm(form) {
 function displaySpinner() {
     document.querySelector('.spinner-wrapper').style.display = 'flex';
     console.log('ran');
+}
+
+// Sliding to the next/previous image
+function slide(button, direction) {
+    const slider = button.parentNode.parentNode.querySelector('.slider');
+    console.log(slider.offsetWidth);
+    slider.scrollLeft += slider.offsetWidth * direction;
+
 }
 
 // APPLYING DISPLAY-SPINNER ONCLICK TO ALL RELEVANT ANCHOR TAGS / SUBMIT BUTTONS

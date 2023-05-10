@@ -121,45 +121,6 @@ if (isset($_POST['placeorder']) && isset($_SESSION['cart']) && !empty($_SESSION[
             exit;
         }
     }
-    // foreach ($products as $product) {
-    //     $currentQuantities = array();
-    //     foreach (explode(",", $product['size_quantity']) as $size_quantity_pair) {
-    //         if ($size_quantity_pair != "OUT OF STOCK") {
-    //             list($size_key, $quantity_value) = explode(":", $size_quantity_pair);
-    //             $currentQuantities[$size_key] = $quantity_value;
-    //         }
-    //     }
-    //     foreach ($products_in_cart as $id_size => $request) { 
-    //         $id = (int)explode(",", $id_size)[0]; 
-    //         $size = explode(",", $id_size)[1];
-    //         if ($id == $product['id']) {
-    //             if (!isset($currentQuantities[$size]) || ((int)$currentQuantities[$size] - $request) < 0) {
-    //                 // HANDLE INVALID AMOUNT
-    //                 $_SESSION['stock-error'] = $products[$id]['name'];
-    //                 unset($_SESSION['cart'][$id_size]);
-    //                 header('location: index.php?page=cancel');
-    //                 exit;
-    //             } 
-    //             $currentQuantities[$size] = (int)$currentQuantities[$size] - $request;                
-    //             if ($currentQuantities[$size] == 0) {
-    //                 unset($currentQuantities[$size]);
-    //             }
-    //         }
-    //     }
-    //     if (count($currentQuantities) === 0) {
-    //         $size_quantity = "OUT OF STOCK";
-    //     } else {
-    //         $newQuantities = array();
-    //         foreach ($currentQuantities as $size_key => $quantity_value) {
-    //             $newQuantities[] = $size_key.":".$quantity_value;
-    //         }
-    //         $size_quantity = implode(",", $newQuantities);
-    //     }
-    //     // echo $size_quantity."<br>";// TESTING
-    //     $query->bindParam(':new_size_quantity', $size_quantity, PDO::PARAM_STR);
-    //     $query->bindParam(':id', $product['id'], PDO::PARAM_INT);
-    //     $query->execute();
-    // }
 
     // CREATING LINE ITEMS
     $line_items = array();

@@ -231,10 +231,16 @@ footer {
 
 .product .product-image-box .slider {
     display: flex;
-    overflow-x: hidden;
+    overflow-x: scroll;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3 / 4 ;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.product .product-image-box .slider::-webkit-scrollbar {
+    display: none;
 }
 
 .product .product-image-box .slider .product-image {
@@ -242,9 +248,36 @@ footer {
     scroll-snap-align: start;
     width: 100%;
     object-fit: cover;
+    position: relative;
 }
 
-.product .product-image-box .slider-buttons {
+.slider-buttons {
+    width: 100%;
+    display: flex;
+    height: 3em;
+    border: 5px solid transparent;
+    position: absolute;
+    bottom: 0;
+}
+
+.slider-buttons button {
+    margin: 0 4px;
+    /* border-radius: 1.5em; */
+    color: black;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    background-color: transparent;
+    border: none;
+    flex-grow: 1;
+    /* background-color: ; */
+    font-size: 1.5em;
+    font-weight: bold;
+    /* display: flex;
+    justify-content: center;
+    align-content: center; */
+    cursor: pointer;
+}
+
+/* .product .product-image-box .slider-buttons {
     display: flex;
     padding: 1em;
     column-gap: 1em;
@@ -253,7 +286,7 @@ footer {
     justify-content: center;
     left: 0;
     right: 0;
-}
+} */
 
 .product .product-image-box .slider-buttons a {
     margin: 0.5em;
@@ -288,13 +321,14 @@ footer {
     grid-area: cart-form;
     margin: 0.5em 0;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
     grid-template-areas: 
         "product-quantity ."
-        "product-size cart-submit"
-        "quantity-notice .";
-    justify-items: start;
+        "product-size quantity-notice"
+        "cart-submit cart-submit";
+    justify-items: center;
+    gap: 0.5em;
 }
 
 /* STYLING QUANTITY SELECTOR */
@@ -312,8 +346,9 @@ input[type="number"] {
 .product-quantity {
     grid-area: product-quantity;
     position: relative;
-    width: 8em;
-    margin: 0.5em 0;
+    /* width: 9em; */
+    width: 100%;
+    /* margin: 0.5em 0; */
 }
 
 .product-quantity .quantity-number {
@@ -328,7 +363,7 @@ input[type="number"] {
     font-weight: bold;
     font-size: 1.5em;
     height: 2em;
-    width: 1.5em;
+    width: 25%;
     position: absolute;
 }
 
@@ -354,19 +389,27 @@ input[type="number"] {
 
 .product .cart-form .product-size {
     background-color: rgb(192, 192, 192);
+    border: 1px solid white;
     grid-area: product-size;
     display: inline-flex;
-    border-radius: 1.5em;
+    border-radius: 1em;
     overflow: hidden;
-    margin: 0.5em 0;
+    /* height: 4em; */
+    /* margin: 0.5em 0; */
+    width: 100%;
+    height: 3.5em;
 }
 
 .size-label {
+    flex-grow: 1;
     background-color: rgb(192, 192, 192);
     font-size: 1.5em;
     font-weight: bold;
-    padding: 0.5em 0.8em;
+    /* padding: 0.5em 0.8em; */
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .out-of-stock {
@@ -382,10 +425,20 @@ input[type="number"] {
     border-radius: 1em;
 }
 
-.product .cart-form .invalid-size .size-label{
+
+.product .cart-form .invalid-size {
+    border: 1px solid rgba(198, 51, 51);
+}
+
+.product .cart-form .invalid-size .size-label {
     color: rgb(198, 51, 51);
     animation: shake 0.5s;
 }
+
+.product .cart-form .invalid-size .size-label:not(:last-of-type) {
+    border-right: 1px solid rgba(198, 51, 51);
+}
+
 
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -396,11 +449,8 @@ input[type="number"] {
   }
 
 .product .cart-form .size-label:not(:last-of-type) {
-    border-right: 1px solid rgba(92, 92, 92);
-}
-
-.product .cart-form .invalid-size .size-label:not(:last-of-type) {
-    border-right: 1px solid rgba(198, 51, 51);
+    /* border-right: 4px solid rgba(92, 92, 92); */
+    border-right: 1px solid white;
 }
 
 .product .cart-form .size-radio {
@@ -413,11 +463,13 @@ input[type="number"] {
 
 .product .cart-form .cart-submit {
     grid-area: cart-submit;
-    justify-self: end;
+    /* justify-self: end; */
+    height: 2em;
+    width: 100%;
     border: none;
     color: white;
     background-color: black;
-    padding: 0.3em 0.5em;
+    /* padding: 0.3em 0.5em; */
     font-size: 1.8em;
     border-radius: 0.5em;
     font-family: 'Bebas Neue', cursive;
@@ -426,10 +478,11 @@ input[type="number"] {
 
 .quantity-notice {
     grid-area: quantity-notice;
-    padding: 0.2em 1em;
+    /* padding: 0.2em 1em; */
     font-size: 1em;
     font-weight: bold;
     color: rgb(92, 92, 92);
+    align-self: center;
 }
 
 /* STYLING CART PAGE  */

@@ -16,16 +16,20 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <img id="<?=$product['id']?>-image-3" src="products/<?=$product['img']?>/3.jpg" alt="" class="product-image">
             </div>
             <div class="slider-buttons">
+                <button onclick="slide(this, -1)">&#10094</button>
+                <button onclick="slide(this, 1)">&#10095</button>
+            </div>
+            <!-- <div class="slider-buttons">
                 <a href="#<?=$product['id']?>-image-1"></a>
                 <a href="#<?=$product['id']?>-image-2"></a>
                 <a href="#<?=$product['id']?>-image-3"></a>
-            </div>
+            </div> -->
         </div>  
         <div class="product-name"><?=$product['name']?></div>
         <div class="product-price">&dollar;<?=$product['price']?> CAD</div>
         <?php 
             $statement = $pdo->prepare('SELECT * FROM stock WHERE id = :id');
-            $statement->execute([':id' => $product['stock_id']]);
+            $statement->execute([':id' => $product['id']]);
             $stock = $statement->fetch(PDO::FETCH_ASSOC); 
         ?>
         <?php if (isEmpty($stock)): ?>
