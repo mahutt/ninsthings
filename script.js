@@ -53,7 +53,6 @@ function validateCartForm(form) {
 // DISPLAYING SPINNER WHEN ATTEMPTING REDIRECT
 function displaySpinner() {
     document.querySelector('.spinner-wrapper').style.display = 'flex';
-    console.log('ran');
 }
 
 // Sliding to the next/previous image

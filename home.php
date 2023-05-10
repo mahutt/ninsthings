@@ -46,6 +46,8 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
                     <?php if ($size != 'id' && $quantity > 0): ?>
                         <input name="size" class="size-radio" type="radio" value="<?=$size?>" id="<?=$product['id'].'-'.$size?>-radio">
                         <label id="<?=$quantity?>" class="size-label" for="<?=$product['id'].'-'.$size?>-radio"><?=$size?></label>
+                    <?php elseif ($size != 'id' && $quantity == 0): ?>
+                        <label class="empty-size-label"><?=$size?><div class="strike"></div></label>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </div>
