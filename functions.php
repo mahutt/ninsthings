@@ -32,25 +32,22 @@ function getsizes($str) {
     return $sizes;
 }
 
-// TRANSFORMS THE SQL QUANTITY/SIZE STRING INTO A PHP ARRAY OF KEY-VALUE PAIRS
-function getQuantityPerSize($str) {
-    $sizes_quantities = explode(",", $str);
-    $quantities_per_size = array();
-    foreach ($sizes_quantities as $size_quantity) {
-        list($size, $quantity) = explode(":", $size_quantity);
-        $quantities_per_size[$size] = $quantity;
+// VERIFIES WHETHER GIVEN ITEM'S STOCK ROW IS EMPTY
+function isEmpty($stock) {
+    foreach ($stock as $size => $quantity) {
+        if ($size != 'id' && $quantity > 0) {
+            return false;
+        }
     }
-    return $quantities_per_size;
+    return true;
 }
 
-// RETURNS TOTAL NUMBER OF A SPECIFIC ITEM (IN ALL SIZES)
-function getquantity($str) {
-    $quantity = 0;
-    $sizes = explode(",", $str);
-    foreach ($sizes as $size) {
-        $quantity += (int)explode(':', $size)[1];
-    }
-    return $quantity;
+// FETCHING TO CHECK WETHER THERE IS ENOUGH STOCK
+function getStock($stock_id) {
+    global $pdo;
+    $statement = $pdo->prepare('SELECT * FROM stock WHERE id = ?');
+    $statement->execute([$stock_id]);
+    return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
 // TEMPLATE HEADER
