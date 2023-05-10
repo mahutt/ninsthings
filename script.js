@@ -59,9 +59,20 @@ function displaySpinner() {
 // Sliding to the next/previous image
 function slide(button, direction) {
     const slider = button.parentNode.parentNode.querySelector('.slider');
-    console.log(slider.offsetWidth);
     slider.scrollLeft += slider.offsetWidth * direction;
-
+    if (direction < 0) {
+        if (button.classList.contains('slideLeft')) {
+            button.classList.remove('slideLeft');
+            button.offsetWidth;
+        } 
+        button.classList.add('slideLeft');
+    } else if (direction > 0) {
+        if (button.classList.contains('slideRight')) {
+            button.classList.remove('slideRight');
+            button.offsetWidth;
+        }
+        button.classList.add('slideRight');
+    } 
 }
 
 // APPLYING DISPLAY-SPINNER ONCLICK TO ALL RELEVANT ANCHOR TAGS / SUBMIT BUTTONS
