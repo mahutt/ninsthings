@@ -75,12 +75,12 @@ function slide(button, direction) {
 }
 
 // APPLYING SLIDE TO SLIDER BUTTONS
-const sliderButtonWrappers = document.querySelectorAll('.slider-buttons');
-for (let i = 0; i < sliderButtonWrappers.length; i++) {
-    sliderButtonWrappers[i].children[0].addEventListener('click', function() {
+const sliderButtons = document.querySelectorAll('.slider-buttons');
+for (let i = 0; i < sliderButtons.length; i++) {
+    sliderButtons[i].children[0].addEventListener('click', function() {
         slide(this, -1);
     });
-    sliderButtonWrappers[i].children[1].addEventListener('click', function() {
+    sliderButtons[i].children[1].addEventListener('click', function() {
         slide(this, 1);
     });
 }
@@ -91,7 +91,6 @@ for (let i = 0; i < redirects.length; i++) {
     redirects[i].onclick = function() {
         displaySpinner();
     };
-    console.log('applied');
 }
 
 // APPLYING THE selected() FUNCTION TO ALL LABELS
@@ -106,9 +105,47 @@ for (let i = 0; i < sizeLabels.length; i++) {
 const url = window.location.href;
 const navitems = document.querySelectorAll(".nav-item");
 for (let i = 0; i < navitems.length; i++) {
-    console.log(navitems[i].href);
     if (navitems[i].href == url) {
         navitems[i].parentNode.innerHTML += "<span class=\"underline\"></span>";
         break;
     }
 }
+
+// ANIMATING HEADER ON HOVER
+function giggle(letters, n) {
+    if (n < letters.length) {
+        if (letters[n].classList.contains('giggle')) {
+            letters[n].classList.remove('giggle');
+            letters[n].offsetWidth;
+        }
+        letters[n].classList.add('giggle');
+        setTimeout(() => {
+            giggle(letters, n + 1);
+        }, 30);
+    } else {
+        console.log("End");
+    }
+}
+const heading = document.querySelector(".heading");
+const letters = heading.innerHTML.split('');
+let wrappedLetters = "";
+for (const letter of letters) {
+    wrappedLetters += (letter == " " ? ('<span>&nbsp</span>') : ('<span>' + letter + '</span>'));
+}
+heading.innerHTML = wrappedLetters;
+heading.addEventListener('click', function() {
+    giggle(this.children, 0);
+});
+window.onload = () => {
+    setTimeout(() => {
+        giggle(heading.children, 0); // RUNNING GIGGLE ON LOAD
+    }, 500)
+}
+
+
+
+
+
+
+
+

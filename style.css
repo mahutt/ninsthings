@@ -116,7 +116,24 @@ footer {
     font-family: 'Mynerve', cursive;
     font-size: 5em;
     color: rgb(192, 192, 192);
+    cursor: default;
+    /* position: relative; */
 }
+
+.heading span {
+    display: inline-block;
+}
+
+.giggle {
+    animation: giggle 0.5s;
+}
+
+@keyframes giggle {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
 .shopping-bag {
     grid-area: shopping-bag;
     width: 8em;
