@@ -74,6 +74,17 @@ function slide(button, direction) {
     } 
 }
 
+// APPLYING SLIDE TO SLIDER BUTTONS
+const sliderButtonWrappers = document.querySelectorAll('.slider-buttons');
+for (let i = 0; i < sliderButtonWrappers.length; i++) {
+    sliderButtonWrappers[i].children[0].addEventListener('click', function() {
+        slide(this, -1);
+    });
+    sliderButtonWrappers[i].children[1].addEventListener('click', function() {
+        slide(this, 1);
+    });
+}
+
 // APPLYING DISPLAY-SPINNER ONCLICK TO ALL RELEVANT ANCHOR TAGS / SUBMIT BUTTONS
 const redirects = document.querySelectorAll('.redirect');
 for (let i = 0; i < redirects.length; i++) {
